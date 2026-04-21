@@ -21,14 +21,19 @@ app.post("/contacts", async (req, res) => {
 
   const { data, error } = await supabase
     .from("contacts")
-    .insert([{ first_name, last_name }]);
+    .insert([{ first_name, last_name }])
+    .select();
 
   if (error) return res.status(500).json(error);
 
-  console.log({
+  // 🔥 EVENT (core of your system)
+  const event = {
     type: "lead.created",
-    data
-  });
+    timestamp: new Date().toISOString(),
+    data: data[0]
+  };
+
+  console.log("EVENT:", event);
 
   res.json(data);
 });
