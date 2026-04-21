@@ -36,3 +36,12 @@ app.post("/contacts", async (req, res) => {
 app.listen(3001, () => {
   console.log("Server running on 3001");
 });
+app.get("/contacts", async (req, res) => {
+  const { data, error } = await supabase
+    .from("contacts")
+    .select("*");
+
+  if (error) return res.status(500).json(error);
+
+  res.json(data);
+});
